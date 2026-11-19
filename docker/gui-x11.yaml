@@ -1,0 +1,9 @@
+# Linux desktop (incl. Ubuntu dual boot) or WSL2 shell with WSLg. Host networking so ROS 2 discovery reaches the robot.
+services:
+  ros:
+    network_mode: host
+    environment:
+      - DISPLAY=${DISPLAY:-:0}
+      - QT_X11_NO_MITSHM=1
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix

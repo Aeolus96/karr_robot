@@ -1,0 +1,9 @@
+# Any host (default on macOS): desktop in the browser at http://localhost:6080/vnc.html
+# Bound to 127.0.0.1 only; the VNC server has no password.
+services:
+  ros:
+    environment:
+      - KARR_VNC=1
+      - VNC_GEOMETRY=${VNC_GEOMETRY:-1600x900}
+    ports:
+      - "127.0.0.1:6080:6080"

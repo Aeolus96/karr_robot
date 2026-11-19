@@ -1,0 +1,845 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="karr_description_ros1">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.011368 2.2931E-06 0.43149"
+        rpy="0 0 0" />
+      <mass
+        value="100" />
+      <inertia
+        ixx="13.7"
+        ixy="-0.00020798"
+        ixz="-1.0087"
+        iyy="19.462"
+        iyz="-0.00014075"
+        izz="23.711" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="fl_steering_link">
+    <inertial>
+      <origin
+        xyz="1.4884E-07 2.3073E-07 -0.084288"
+        rpy="0 0 0" />
+      <mass
+        value="6.3588" />
+      <inertia
+        ixx="0.055007"
+        ixy="-8.2358E-07"
+        ixz="2.3514E-08"
+        iyy="0.041611"
+        iyz="5.8868E-08"
+        izz="0.052192" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/fl_steering_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/fl_steering_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="fl_steering"
+    type="revolute">
+    <origin
+      xyz="0.3556 0.2286 0.3345"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="fl_steering_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="6"
+      velocity="1.5" />
+    <dynamics
+      damping="0.1"
+      friction="1" />
+  </joint>
+  <link
+    name="fl_wheel_link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="3.465" />
+      <inertia
+        ixx="0.01418"
+        ixy="-1.2157E-19"
+        ixz="-9.2436E-20"
+        iyy="0.01418"
+        iyz="-1.2825E-19"
+        izz="0.025175" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/fl_wheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.50196 0.50196 0.50196 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/fl_wheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="fl_wheel"
+    type="continuous">
+    <origin
+      xyz="0 0 -0.212"
+      rpy="1.5707963267949 0 3.14159265358979" />
+    <parent
+      link="fl_steering_link" />
+    <child
+      link="fl_wheel_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      effort="14"
+      velocity="35" />
+    <dynamics
+      damping="0.1"
+      friction="1" />
+  </joint>
+  <link
+    name="fr_steering_link">
+    <inertial>
+      <origin
+        xyz="-1.4884E-07 -2.3073E-07 -0.084288"
+        rpy="0 0 0" />
+      <mass
+        value="6.3588" />
+      <inertia
+        ixx="0.055007"
+        ixy="-8.2358E-07"
+        ixz="-2.3514E-08"
+        iyy="0.041611"
+        iyz="-5.8868E-08"
+        izz="0.052192" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/fr_steering_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/fr_steering_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="fr_steering"
+    type="revolute">
+    <origin
+      xyz="0.3556 -0.2286 0.3345"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="fr_steering_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="6"
+      velocity="1.5" />
+    <dynamics
+      damping="0.1"
+      friction="1" />
+  </joint>
+  <link
+    name="fr_wheel_link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="3.465" />
+      <inertia
+        ixx="0.01418"
+        ixy="-1.5357E-32"
+        ixz="-1.1641E-17"
+        iyy="0.01418"
+        iyz="6.688E-19"
+        izz="0.025175" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/fr_wheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.50196 0.50196 0.50196 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/fr_wheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="fr_wheel"
+    type="continuous">
+    <origin
+      xyz="0 0 -0.212"
+      rpy="-1.5707963267949 0 0" />
+    <parent
+      link="fr_steering_link" />
+    <child
+      link="fr_wheel_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      effort="14"
+      velocity="35" />
+    <dynamics
+      damping="0.1"
+      friction="1" />
+  </joint>
+  <link
+    name="bl_steering_link">
+    <inertial>
+      <origin
+        xyz="-1.48841857172677E-07 -2.30726016708926E-07 -0.0842876754537782"
+        rpy="0 0 0" />
+      <mass
+        value="6.35875961788887" />
+      <inertia
+        ixx="0.0550065404106483"
+        ixy="-8.23584101782654E-07"
+        ixz="-2.3513572635351E-08"
+        iyy="0.041611268323679"
+        iyz="-5.88677948809197E-08"
+        izz="0.0521917225589976" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/bl_steering_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/bl_steering_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="bl_steering"
+    type="revolute">
+    <origin
+      xyz="-0.3556 0.2286 0.3345"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="bl_steering_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="6"
+      velocity="1.5" />
+    <dynamics
+      damping="0.1"
+      friction="1" />
+  </joint>
+  <link
+    name="bl_wheel_link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="3.465" />
+      <inertia
+        ixx="0.01418"
+        ixy="-6.6136E-20"
+        ixz="2.8614E-19"
+        iyy="0.01418"
+        iyz="1.5784E-19"
+        izz="0.025175" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/bl_wheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.50196 0.50196 0.50196 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/bl_wheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="bl_wheel"
+    type="continuous">
+    <origin
+      xyz="0 0 -0.212"
+      rpy="-1.5707963267949 0 0" />
+    <parent
+      link="bl_steering_link" />
+    <child
+      link="bl_wheel_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      effort="14"
+      velocity="35" />
+    <dynamics
+      damping="0.1"
+      friction="1" />
+  </joint>
+  <link
+    name="br_steering_link">
+    <inertial>
+      <origin
+        xyz="-1.4884E-07 -2.3073E-07 -0.084288"
+        rpy="0 0 0" />
+      <mass
+        value="6.3588" />
+      <inertia
+        ixx="0.055007"
+        ixy="-8.2358E-07"
+        ixz="-2.3514E-08"
+        iyy="0.041611"
+        iyz="-5.8868E-08"
+        izz="0.052192" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/br_steering_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/br_steering_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="br_steering"
+    type="revolute">
+    <origin
+      xyz="-0.3556 -0.2286 0.3345"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="br_steering_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="6"
+      velocity="1.5" />
+    <dynamics
+      damping="0.1"
+      friction="1" />
+  </joint>
+  <link
+    name="br_wheel_link">
+    <inertial>
+      <origin
+        xyz="0 0 2.7756E-17"
+        rpy="0 0 0" />
+      <mass
+        value="3.465" />
+      <inertia
+        ixx="0.01418"
+        ixy="-8.267E-21"
+        ixz="3.0406E-19"
+        iyy="0.01418"
+        iyz="-2.0986E-20"
+        izz="0.025175" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/br_wheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.50196 0.50196 0.50196 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/br_wheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="br_wheel"
+    type="continuous">
+    <origin
+      xyz="0 0 -0.212"
+      rpy="-1.5707963267949 0 0" />
+    <parent
+      link="br_steering_link" />
+    <child
+      link="br_wheel_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      effort="14"
+      velocity="35" />
+    <dynamics
+      damping="0.1"
+      friction="1" />
+  </joint>
+  <link
+    name="left_gps_link">
+    <inertial>
+      <origin
+        xyz="-5.3449E-05 0.3048 -0.016676"
+        rpy="0 0 0" />
+      <mass
+        value="1.3067" />
+      <inertia
+        ixx="0.0015479"
+        ixy="-3.6943E-10"
+        ixz="-9.9214E-06"
+        iyy="0.0015879"
+        iyz="-2.3167E-11"
+        izz="0.0026937" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/left_gps_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/left_gps_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_gps"
+    type="fixed">
+    <origin
+      xyz="0.3429 0.3048 1.0038"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="left_gps_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="right_gps_link">
+    <inertial>
+      <origin
+        xyz="-5.3449E-05 0.3048 -0.016676"
+        rpy="0 0 0" />
+      <mass
+        value="1.3067" />
+      <inertia
+        ixx="0.0015479"
+        ixy="-3.6943E-10"
+        ixz="-9.9214E-06"
+        iyy="0.0015879"
+        iyz="-2.3167E-11"
+        izz="0.0026937" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/right_gps_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/right_gps_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_gps"
+    type="fixed">
+    <origin
+      xyz="0.3429 -0.3048 1.0038"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="right_gps_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="livox_base_link">
+    <inertial>
+      <origin
+        xyz="-0.0001997 -6.1721E-06 0.022032"
+        rpy="0 0 0" />
+      <mass
+        value="0.14189" />
+      <inertia
+        ixx="4.1797E-05"
+        ixy="-5.622E-09"
+        ixz="3.0551E-07"
+        iyy="4.5077E-05"
+        iyz="-6.5495E-10"
+        izz="6.8799E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/livox_base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/livox_base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="livox_base"
+    type="fixed">
+    <origin
+      xyz="0.3429 0 0.8797"
+      rpy="3.1416 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="livox_base_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="left_zedxones_link">
+    <inertial>
+      <origin
+        xyz="0.022227 9.5481E-05 0.012274"
+        rpy="0 0 0" />
+      <mass
+        value="0.024173" />
+      <inertia
+        ixx="4.0446E-06"
+        ixy="-3.4686E-10"
+        ixz="2.5243E-09"
+        iyy="1.7111E-06"
+        iyz="-3.325E-09"
+        izz="3.1877E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/left_zedxones_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.85098 1 0.25882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/left_zedxones_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_zedxones"
+    type="fixed">
+    <origin
+      xyz="0.26708 0.28843 0.82828"
+      rpy="0 0.5236 2.0944" />
+    <parent
+      link="base_link" />
+    <child
+      link="left_zedxones_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="center_zedxones_link">
+    <inertial>
+      <origin
+        xyz="0.022227 9.5494E-05 0.012274"
+        rpy="0 0 0" />
+      <mass
+        value="0.024173" />
+      <inertia
+        ixx="4.0446E-06"
+        ixy="-3.4801E-10"
+        ixz="2.5232E-09"
+        iyy="1.7111E-06"
+        iyz="-3.3249E-09"
+        izz="3.1877E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/center_zedxones_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.30196 0.30196 0.30196 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/center_zedxones_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="center_zedxones"
+    type="fixed">
+    <origin
+      xyz="0.34893 0 0.8854"
+      rpy="0 0.2618 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="center_zedxones_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="right_zedxones_link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0" />
+      <inertia
+        ixx="0"
+        ixy="0"
+        ixz="0"
+        iyy="0"
+        iyz="0"
+        izz="0" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/right_zedxones_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://karr_description_ros1/meshes/right_zedxones_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_zedxones"
+    type="fixed">
+    <origin
+      xyz="0.267084982524774 -0.288430235963189 0.8282794192948"
+      rpy="0 0.5235987755983 -2.0943951023932" />
+    <parent
+      link="base_link" />
+    <child
+      link="right_zedxones_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+</robot>
