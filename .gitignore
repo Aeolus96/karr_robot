@@ -8,3 +8,6 @@ urdf_prep/karr_views.png
 urdf_prep/karr_description_ros1/export.log
 __pycache__/
 .DS_Store
+
+# Blender render frames (media/render_karr.py)
+media/frames/

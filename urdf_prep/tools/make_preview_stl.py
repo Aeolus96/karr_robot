@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""Assemble the robot's visual meshes (all joints at zero) into one small ASCII STL and embed it in README.md.
+"""Assemble the robot's visual meshes (all joints at zero) into one binary STL: media/karr.stl.
 
-GitHub renders a ```stl code block as an interactive 3D viewer, so this puts a rotatable K.A.R.R. on the repo page.
-Meshes are simplified by vertex clustering to keep the README small.
+GitHub shows .stl files in a repo with an interactive 3D viewer, and the README links to it. Chassis, steering modules
+and wheels keep their full detail; only very dense meshes (Livox, ZED cameras: 20k-76k triangles each for parts a few
+cm across) are simplified by vertex clustering.
 
-    python3 urdf_prep/tools/make_preview_stl.py                 # default: ~3000 triangles, updates README.md
-    python3 urdf_prep/tools/make_preview_stl.py --tris 4000 --out docs/karr_preview.stl
+    python3 urdf_prep/tools/make_preview_stl.py                  # -> media/karr.stl
+    python3 urdf_prep/tools/make_preview_stl.py --max-part 2000 --out /tmp/karr.stl
 
 Needs only numpy. Re-run after the robot model changes.
 """
 import argparse
 import math
-import re
 import struct
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -19,7 +19,6 @@ from pathlib import Path
 import numpy as np
 
 REPO = Path(__file__).resolve().parents[2]
-BEGIN, END = '<!-- preview-stl:begin -->', '<!-- preview-stl:end -->'
 
 
 def rpy_matrix(r, p, y):
@@ -82,49 +81,42 @@ def assemble(urdf, mesh_dir):
         T = world[link.get('name')] @ origin_tf(vis)
         t = load_stl(mesh_dir / mesh.get('filename').split('/')[-1])
         parts.append(t @ T[:3, :3].T + T[:3, 3])
-    return np.concatenate(parts)
+    return parts
 
 
-def to_ascii(tris):
+def write_binary(tris, path):
     n = np.cross(tris[:, 1] - tris[:, 0], tris[:, 2] - tris[:, 0])
     n /= np.maximum(np.linalg.norm(n, axis=1, keepdims=True), 1e-12)
-    g = lambda a, d=4: ' '.join(f'{x:.{d}g}' for x in a)  # noqa: E731
-    out = ['solid karr']
-    for t, nn in zip(tris, n):
-        out.append(f'facet normal {g(np.round(nn, 2) + 0.0, 3)}\nouter loop\nvertex {g(t[0])}\nvertex {g(t[1])}\nvertex {g(t[2])}\n'
-                   'endloop\nendfacet')
-    out.append('endsolid karr')
-    return '\n'.join(out) + '\n'
+    rec = np.zeros(len(tris), dtype=np.dtype([('n', '<3f4'), ('v', '<9f4'), ('a', '<u2')]))
+    rec['n'], rec['v'] = n, tris.reshape(-1, 9)
+    with open(path, 'wb') as f:
+        f.write(b'K.A.R.R. (Keystone Autonomous Resource Rover)'.ljust(80, b' '))
+        f.write(struct.pack('<I', len(tris)))
+        f.write(rec.tobytes())
+
+
+def simplify(t, max_tris):
+    if len(t) <= max_tris:
+        return t
+    size = float(np.max(t.reshape(-1, 3).max(0) - t.reshape(-1, 3).min(0)))
+    lo, hi = size * 1e-4, size * 0.2      # bisect on grid cell size
+    for _ in range(30):
+        cell = math.sqrt(lo * hi)
+        lo, hi = (cell, hi) if len(cluster(t, cell)) > max_tris else (lo, cell)
+    return cluster(t, hi)
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--urdf', type=Path, default=REPO / 'karr_description/urdf/karr.urdf')
-    ap.add_argument('--tris', type=int, default=3000, help='target triangle count')
-    ap.add_argument('--out', type=Path, help='write a .stl file instead of updating README.md')
+    ap.add_argument('--max-part', type=int, default=4000, help='simplify any part above this many triangles')
+    ap.add_argument('--out', type=Path, default=REPO / 'media/karr.stl')
     a = ap.parse_args()
-
-    tris = assemble(a.urdf, a.urdf.parent.parent / 'meshes')
-    tris *= 1000.0  # mm: whole numbers keep the text short
-    lo, hi = 1.0, 200.0  # bisect on grid cell size (mm)
-    for _ in range(25):
-        cell = math.sqrt(lo * hi)
-        lo, hi = (cell, hi) if len(cluster(tris, cell)) > a.tris else (lo, cell)
-    small = cluster(tris, hi)
-    text = to_ascii(np.round(small, 0))
-    print(f'{len(tris)} -> {len(small)} triangles, cell {hi:.1f} mm, {len(text) / 1e3:.0f} kB')
-
-    if a.out:
-        a.out.write_text(text)
-        return
-    readme = REPO / 'README.md'
-    s = readme.read_text(encoding='utf-8')
-    block = f'{BEGIN}\n```stl\n{text}```\n{END}'
-    if BEGIN not in s:
-        raise SystemExit(f'README.md has no {BEGIN} ... {END} markers')
-    readme.write_text(re.sub(re.escape(BEGIN) + '.*?' + re.escape(END), lambda _: block, s, flags=re.S),
-                      encoding='utf-8')
-    print('updated README.md')
+    parts = assemble(a.urdf, a.urdf.parent.parent / 'meshes')
+    tris = np.concatenate([simplify(t, a.max_part) for t in parts])
+    a.out.parent.mkdir(parents=True, exist_ok=True)
+    write_binary(tris, a.out)
+    print(f'{sum(len(t) for t in parts)} -> {len(tris)} triangles, {a.out.stat().st_size / 1e6:.1f} MB -> {a.out}')
 
 
 if __name__ == '__main__':

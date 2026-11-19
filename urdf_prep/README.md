@@ -18,8 +18,9 @@ NOTES.md                 Decisions made during conversion, and open items
    ```
 3. Check (in the container, needs ROS): `./dev.sh verify` or `.\dev.ps1 verify`. Every inertia line must say `ok`. Look
    at `urdf_prep/karr_views.png`, then `./dev.sh display`.
-4. Refresh the 3D preview on the repo page: `python3 urdf_prep/tools/make_preview_stl.py` (needs numpy).
-5. Commit the export, the regenerated package and README.md together.
+4. Refresh the 3D model linked from the README: `python3 urdf_prep/tools/make_preview_stl.py` (needs numpy), and if
+   the robot looks different, re-render the GIFs (see [media/README.md](../media/README.md)).
+5. Commit the export, the regenerated package and `media/` together.
 
 Every hand fix, mass, joint limit, color and sensor frame lives in the CONFIG section of
 [tools/convert_sw_export.py](tools/convert_sw_export.py). **Change values there, not in `karr.urdf`.** The converter
@@ -48,4 +49,4 @@ What the converter does to the raw export:
 | `frame_report.py` | World pose and axis directions of chosen frames |
 | `render_urdf.py` | Side, front and top views of the visual meshes to a PNG |
 | `mesh_bbox.py` | Bounding box and triangle count of every STL in a folder |
-| `make_preview_stl.py` | Simplified one-piece ASCII STL of the robot, embedded in the top-level README (GitHub shows it as a 3D viewer) |
+| `make_preview_stl.py` | The whole robot as one binary STL, `media/karr.stl` (GitHub shows .stl files in a 3D viewer) |
