@@ -1,6 +1,6 @@
 # karr_robot
 
-Everything for the K.A.R.R. robot (LTU): ROS 2 Jazzy packages, the URDF pipeline from SolidWorks, and a dev container.
+Everything for the K.A.R.R. (Keystone Autonomous Resource Rover) robot: ROS 2 Jazzy packages, the URDF pipeline from SolidWorks, and a dev container.
 One clone sets it all up.
 
 ```
