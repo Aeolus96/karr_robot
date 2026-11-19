@@ -18,7 +18,8 @@ NOTES.md                 Decisions made during conversion, and open items
    ```
 3. Check (in the container, needs ROS): `./dev.sh verify` or `.\dev.ps1 verify`. Every inertia line must say `ok`. Look
    at `urdf_prep/karr_views.png`, then `./dev.sh display`.
-4. Commit the export and the regenerated package together.
+4. Refresh the 3D preview on the repo page: `python3 urdf_prep/tools/make_preview_stl.py` (needs numpy).
+5. Commit the export, the regenerated package and README.md together.
 
 Every hand fix, mass, joint limit, color and sensor frame lives in the CONFIG section of
 [tools/convert_sw_export.py](tools/convert_sw_export.py). **Change values there, not in `karr.urdf`.** The converter
@@ -29,10 +30,11 @@ What the converter does to the raw export:
 - renames the robot to `karr` and the package to `karr_description`, and rewrites mesh paths
 - adds the `base_footprint` root (REP-105)
 - rotates the wheel frames so the axle is +Y, and flips the steering axis to +Z (REP-103)
+- sets the steering range to ±165° (330° hard stop for the wiring)
 - sets masses and limits from CONFIG; scales the SolidWorks inertia tensors to those masses
 - fixes the mirrored-GPS center-of-mass offset (+0.3048 m)
 - collision: one body box from the footprint envelope, raised to the chassis underside; cylinder wheels; nothing else
-- named materials (LTU Blue #005EB8 at 50 % for the body)
+- named materials (blue #005EB8 at 50 % for the body)
 - renames the ZED links to `<name>_camera_link`; adds `livox_frame` and `livox_imu_link`
 - writes the Nav2 footprint polygon to `config/footprint.yaml`
 
@@ -46,3 +48,4 @@ What the converter does to the raw export:
 | `frame_report.py` | World pose and axis directions of chosen frames |
 | `render_urdf.py` | Side, front and top views of the visual meshes to a PNG |
 | `mesh_bbox.py` | Bounding box and triangle count of every STL in a folder |
+| `make_preview_stl.py` | Simplified one-piece ASCII STL of the robot, embedded in the top-level README (GitHub shows it as a 3D viewer) |

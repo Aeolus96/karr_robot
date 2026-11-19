@@ -1,0 +1,6 @@
+# GNSS, right antenna
+- ros_topic_name: /gps/right/fix
+  gz_topic_name: /gps/right/fix
+  ros_type_name: sensor_msgs/msg/NavSatFix
+  gz_type_name: gz.msgs.NavSat
+  direction: GZ_TO_ROS

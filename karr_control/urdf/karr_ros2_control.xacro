@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!-- ros2_control joints of K.A.R.R. Include from a robot xacro and pick the hardware plugin:
+       sim:   gz_ros2_control/GazeboSimSystem
+       robot: the CAN hardware interface (not written yet)
+     steered_modules: modules that have a steering motor (must match controllers.yaml / drive.yaml). -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="karr_ros2_control" params="plugin steered_modules:='fl fr bl br'">
+    <ros2_control name="karr" type="system">
+      <hardware>
+        <plugin>${plugin}</plugin>
+      </hardware>
+      <xacro:macro name="steering_joint" params="m">
+        <xacro:if value="${m in steered_modules.split()}">
+          <joint name="${m}_steering">
+            <command_interface name="position">
+              <param name="min">-1.5708</param>
+              <param name="max">1.5708</param>
+            </command_interface>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+          </joint>
+        </xacro:if>
+      </xacro:macro>
+      <xacro:macro name="wheel_joint" params="m">
+        <joint name="${m}_wheel">
+          <command_interface name="velocity">
+            <param name="min">-21.9</param>
+            <param name="max">21.9</param>
+          </command_interface>
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+        </joint>
+      </xacro:macro>
+      <xacro:steering_joint m="fl"/>
+      <xacro:steering_joint m="fr"/>
+      <xacro:steering_joint m="bl"/>
+      <xacro:steering_joint m="br"/>
+      <xacro:wheel_joint m="fl"/>
+      <xacro:wheel_joint m="fr"/>
+      <xacro:wheel_joint m="bl"/>
+      <xacro:wheel_joint m="br"/>
+    </ros2_control>
+  </xacro:macro>
+</robot>

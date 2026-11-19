@@ -9,6 +9,9 @@
     deps       rosdep install for every package in the repo
     verify     Regenerate karr.urdf from the SolidWorks export, build, run all checks
     display    Build, then show K.A.R.R. in rviz2 with joint sliders (extra args go to ros2 launch)
+    sim        Build, then start the Gazebo simulation (extra args go to ros2 launch, e.g. steering_mode:=four_wheel)
+    teleop     Keyboard teleop in this terminal (when the sim runs with teleop:=false)
+    test       Build and run the package tests
     glxtest    Print the OpenGL renderer the container sees
     reset      Remove container AND build volume (clean rebuild)
 
@@ -40,7 +43,10 @@ switch ($Cmd) {
   'deps'    { Up; In-Ws 'sudo apt-get update && rosdep install --from-paths src --ignore-src -y' }
   'verify'  { Up; DC exec ros bash /home/ubuntu/ros2_ws/src/karr_robot/urdf_prep/tools/verify.sh }
   'display' { Up; In-Ws ('colcon build --symlink-install && source install/setup.bash && ros2 launch karr_description display.launch.py ' + ($Rest -join ' ')) }
+  'sim'     { Up; In-Ws ('colcon build --symlink-install && source install/setup.bash && ros2 launch karr_gazebo sim.launch.py ' + ($Rest -join ' ')) }
+  'teleop'  { Up; In-Ws 'ros2 run teleop_twist_keyboard teleop_twist_keyboard' }
+  'test'    { Up; In-Ws 'colcon build --symlink-install && colcon test --event-handlers console_direct+ && colcon test-result --verbose' }
   'glxtest' { Up; In-Ws 'glxinfo -B | grep -i renderer' }
   'reset'   { DC down -v }
-  default   { (Get-Content $PSCommandPath -TotalCount 17) -join "`n" | Write-Host }
+  default   { (Get-Content $PSCommandPath -TotalCount 20) -join "`n" | Write-Host }
 }

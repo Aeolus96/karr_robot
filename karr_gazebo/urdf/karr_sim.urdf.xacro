@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!-- K.A.R.R. for Gazebo: the generated karr_description URDF + ros2_control + simulated sensors + wheel friction.
+     Nothing here changes the real robot's description.
+
+     xacro args:
+       gps_mode   dual | single   dual: left + right antennas (default); single: left only
+       cameras    true | false    the three ZED X One S cameras (the most expensive sensors to render)
+       lidar      true | false    Livox Mid-360 point cloud + its IMU                                    -->
+<robot name="karr" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:arg name="gps_mode" default="dual"/>
+  <xacro:arg name="cameras" default="true"/>
+  <xacro:arg name="lidar" default="true"/>
+
+  <xacro:include filename="$(find karr_description)/urdf/karr.urdf"/>
+  <xacro:include filename="$(find karr_control)/urdf/karr_ros2_control.xacro"/>
+  <xacro:include filename="$(find karr_gazebo)/urdf/sensors.xacro"/>
+
+  <!-- Drive: all four steering motors exist in sim; karr_drive locks the rear ones in 'front' mode -->
+  <xacro:karr_ros2_control plugin="gz_ros2_control/GazeboSimSystem" steered_modules="fl fr bl br"/>
+  <gazebo>
+    <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+      <parameters>$(find karr_control)/config/controllers.yaml</parameters>
+    </plugin>
+  </gazebo>
+
+  <!-- Wheels: rubber on ground. Body: low friction so a scrape doesn't stop the robot dead. -->
+  <xacro:macro name="wheel_surface" params="m">
+    <gazebo reference="${m}_wheel_link">
+      <mu1>1.0</mu1>
+      <mu2>1.0</mu2>
+    </gazebo>
+  </xacro:macro>
+  <xacro:wheel_surface m="fl"/>
+  <xacro:wheel_surface m="fr"/>
+  <xacro:wheel_surface m="bl"/>
+  <xacro:wheel_surface m="br"/>
+  <gazebo reference="base_link">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+  </gazebo>
+
+  <!-- Sensors -->
+  <xacro:if value="$(arg lidar)">
+    <xacro:livox_mid360 frame="livox_frame" imu_frame="livox_imu_link"/>
+  </xacro:if>
+  <xacro:if value="$(arg cameras)">
+    <xacro:zed_x_one_s name="left_zed"/>
+    <xacro:zed_x_one_s name="center_zed"/>
+    <xacro:zed_x_one_s name="right_zed"/>
+  </xacro:if>
+  <xacro:gnss name="left" frame="left_gps_link"/>
+  <xacro:if value="${'$(arg gps_mode)' == 'dual'}">
+    <xacro:gnss name="right" frame="right_gps_link"/>
+  </xacro:if>
+</robot>

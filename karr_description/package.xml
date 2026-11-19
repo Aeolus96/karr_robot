@@ -3,7 +3,7 @@
 <package format="3">
   <name>karr_description</name>
   <version>0.1.0</version>
-  <description>URDF description of the K.A.R.R. robot: 4-wheel independent steering (swerve) base with Livox Mid-360, 3x ZED X One S and dual GNSS. Meshes, URDF, rviz and launch files.</description>
+  <description>URDF description of K.A.R.R. (Keystone Autonomous Resource Rover): 4-wheel independent steering base (Ackermann-style) with Livox Mid-360, 3x ZED X One S and dual GNSS. Meshes, URDF, rviz and launch files.</description>
   <maintainer email="dbutani@ltu.edu">Devson Butani</maintainer>
   <license>Apache-2.0</license>
   <author email="dbutani@ltu.edu">Devson Butani</author>

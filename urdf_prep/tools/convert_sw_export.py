@@ -23,7 +23,7 @@ HALF_PI = '1.5708'
 # ===================================== CONFIG =========================================================
 # ---- Materials (assigned by link name; SolidWorks export colours are ignored) ----
 MATERIALS = {
-    'ltu_blue':    '0 0.3686 0.7216 0.5',   # LTU Blue #005EB8 / RGB 0,94,184 / Pantone 300, 50 % translucent
+    'body_blue':   '0 0.3686 0.7216 0.5',   # blue #005EB8 / RGB 0,94,184, 50 % translucent
     'aluminum':    '0.78 0.80 0.82 1',
     'rubber':      '0.10 0.10 0.10 1',
     'gps_white':   '0.95 0.95 0.95 1',
@@ -34,7 +34,7 @@ MATERIALS = {
 
 def material_for(link):
     if link == 'base_link':
-        return 'ltu_blue'
+        return 'body_blue'
     if link.endswith('_steering_link'):
         return 'aluminum'
     if link.endswith('_wheel_link'):
@@ -66,6 +66,7 @@ BASE_INERTIAL_100KG = dict(xyz='0.011368 2.2931E-06 0.43149',
 # ---- Joint limits ----
 STEERING_AXIS = '0 0 1'          # REP-103: positive steering angle turns the wheel left (CCW seen from above)
 STEERING_EFFORT = 17.0           # Nm, steering motor peak (6 Nm continuous)
+STEERING_LIMIT = 165.0           # deg each way from straight ahead: 330 deg total, a hard stop so the wiring can't wind up
 WHEEL_EFFORT = 30.0              # Nm, estimate for the 350 W hub motor at 46 V (>=15 Nm proven on 20 deg ramp @146 kg)
 WHEEL_RADIUS = 0.1225            # m, from the wheel mesh
 WHEEL_WIDTH = 0.0762             # m
@@ -180,6 +181,8 @@ def main(export_dir, out_dir):
         elif name.endswith('_steering'):
             j.find('axis').set('xyz', STEERING_AXIS)
             j.find('limit').set('effort', g(STEERING_EFFORT))
+            j.find('limit').set('lower', g(round(-math.radians(STEERING_LIMIT), 4)))
+            j.find('limit').set('upper', g(round(math.radians(STEERING_LIMIT), 4)))
         elif name.endswith('_wheel'):
             # exported wheel frames have the axle along Z: rotate so the axle is +Y (positive = drive forward)
             j.find('origin').set('rpy', f'-{HALF_PI} 0 0')

@@ -9,6 +9,9 @@
 #   deps       rosdep install for every package in the repo
 #   verify     Regenerate karr.urdf from the SolidWorks export, build, run all checks
 #   display    Build, then show K.A.R.R. in rviz2 with joint sliders (extra args go to ros2 launch)
+#   sim        Build, then start the Gazebo simulation (extra args go to ros2 launch, e.g. steering_mode:=four_wheel)
+#   teleop     Keyboard teleop in this terminal (when the sim runs with teleop:=false)
+#   test       Build and run the package tests
 #   glxtest    Print the OpenGL renderer the container sees
 #   reset      Remove container AND build volume (clean rebuild)
 #
@@ -43,7 +46,10 @@ case "$cmd" in
   deps)    up; in_ws "sudo apt-get update && rosdep install --from-paths src --ignore-src -y" ;;
   verify)  up; dc exec ros bash /home/ubuntu/ros2_ws/src/karr_robot/urdf_prep/tools/verify.sh ;;
   display) up; in_ws "colcon build --symlink-install && source install/setup.bash && ros2 launch karr_description display.launch.py $*" ;;
+  sim)     up; in_ws "colcon build --symlink-install && source install/setup.bash && ros2 launch karr_gazebo sim.launch.py $*" ;;
+  teleop)  up; in_ws "ros2 run teleop_twist_keyboard teleop_twist_keyboard" ;;
+  test)    up; in_ws "colcon build --symlink-install && colcon test --event-handlers console_direct+ && colcon test-result --verbose" ;;
   glxtest) up; in_ws "glxinfo -B | grep -i renderer" ;;
   reset)   dc down -v ;;
-  *)       sed -n '2,16p' "$0" | sed 's/^# \{0,1\}//' ;;
+  *)       sed -n '2,19p' "$0" | sed 's/^# \{0,1\}//' ;;
 esac

@@ -19,6 +19,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       ros-jazzy-urdf-tutorial \
       ros-jazzy-urdf-launch \
       ros-jazzy-urdfdom-py \
+      ros-jazzy-ros-gz \
+      ros-jazzy-gz-ros2-control \
+      ros-jazzy-ros2-control \
+      ros-jazzy-ros2-controllers \
+      ros-jazzy-teleop-twist-keyboard \
+      python3-pytest \
       liburdfdom-tools \
       python3-colcon-common-extensions \
       python3-rosdep \

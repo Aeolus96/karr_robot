@@ -1,0 +1,22 @@
+# ros2_control controllers for K.A.R.R. Used by Gazebo (gz_ros2_control) now and by the CAN hardware interface later.
+# karr_drive (drive.yaml) turns cmd_vel into commands for steering_controller and wheel_controller.
+controller_manager:
+  ros__parameters:
+    update_rate: 100  # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+    steering_controller:
+      type: position_controllers/JointGroupPositionController
+    wheel_controller:
+      type: velocity_controllers/JointGroupVelocityController
+
+# Order must match steered_modules in drive.yaml. With only front steering motors, list fl_steering, fr_steering.
+steering_controller:
+  ros__parameters:
+    joints: [fl_steering, fr_steering, bl_steering, br_steering]
+
+# Order must match modules in drive.yaml
+wheel_controller:
+  ros__parameters:
+    joints: [fl_wheel, fr_wheel, bl_wheel, br_wheel]

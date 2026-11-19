@@ -1,0 +1,42 @@
+# karr_drive: cmd_vel -> steering + wheel commands, wheel odometry. Geometry from karr_description (karr.urdf).
+karr_drive:
+  ros__parameters:
+    # front      = front Ackermann, rear wheels locked straight (this year: 2 steering motors)
+    # four_wheel = double Ackermann (rear steers opposite to front). Needs a steering motor on all 4.
+    # Override at launch (steering_mode:=...) or live: ros2 param set /karr_drive steering_mode four_wheel
+    steering_mode: front
+    modules: [fl, fr, bl, br]
+    module_x: [0.3556, 0.3556, -0.3556, -0.3556]   # steering pivots in base_link (m)
+    module_y: [0.2286, -0.2286, 0.2286, -0.2286]
+    # Modules with a steering motor, in steering_controller joint order. Sim has all 4.
+    steered_modules: [fl, fr, bl, br]
+    wheel_radius: 0.1225       # m
+    max_wheel_speed: 21.9      # rad/s (6 mph safety limit, same as the URDF)
+    steering_limit: 1.5708     # rad, command range; past 90 deg the wheel flips and reverses (hard stop is 165 deg)
+    cmd_timeout: 0.5           # s without cmd_vel -> slow to a stop at limits.max_decel (not an e-stop!)
+    rate: 50.0                 # Hz
+    use_stamped: false         # true: cmd_vel is TwistStamped
+    publish_tf: true           # odom -> base_footprint; turn off when robot_localization publishes it
+    odom_frame: odom
+    base_frame: base_footprint
+
+    # Safety limits applied to cmd_vel before the kinematics (see karr_control/limits.py). Write all as decimals.
+    limits:
+      max_speed: 2.68          # m/s forward (6 mph)
+      max_reverse_speed: 1.0   # m/s
+      max_accel: 0.5           # m/s^2 speeding up
+      max_decel: 1.0           # m/s^2 slowing down, also on cmd_vel timeout
+      max_angular_speed: 1.0   # rad/s
+      max_angular_accel: 1.0   # rad/s^2, swing turns
+      max_lateral_accel: 1.0   # m/s^2 = speed^2 / radius. At 6 mph: >= 7 m radius, ~6 deg steering
+      min_turn_radius: 1.0     # m, tightest turn while driving (front wheels ~43/30 deg in front mode)
+      max_curvature_rate: 1.0  # 1/m per s: how fast a turn can tighten; straight -> 1 m radius takes 1 s
+      # Swing turn = turning on the spot (front mode: about the rear axle centre). Only when linear.x is below the
+      # threshold and only from standstill; a driving robot stops first.
+      swing_speed_threshold: 0.05  # m/s
+      allow_swing_turn: true
+    # Wheels slow down when a steering motor lags its target (rad of error), and the limiter won't speed up meanwhile
+    steering_alignment:
+      full_speed_below: 0.1
+      stop_above: 0.5
+    mode_switch_max_speed: 0.05  # steering_mode can only be changed below this speed (m/s and rad/s)

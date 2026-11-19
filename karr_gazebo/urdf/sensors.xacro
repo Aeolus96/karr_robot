@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<!-- Gazebo sensor models for K.A.R.R. Topic names and frame_ids match the real drivers, so code written against the
+     sim runs on the robot unchanged:
+       livox_ros_driver2 (xfer_format 0)  /livox/lidar (PointCloud2), /livox/imu, frame livox_frame
+       zed-ros2-wrapper                   /<camera>/rgb/image_rect_color, /<camera>/rgb/camera_info
+       u-blox F9P driver                  /gps/<antenna>/fix (NavSatFix)
+     Gazebo publishes on the same names; karr_gazebo/config/bridge_*.yaml carries them into ROS. -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Livox Mid-360: 360 deg x (-7..+52 deg) in its own frame, 0.1-40 m (10 % reflectivity), 10 Hz.
+       The real scan is non-repetitive (~20k points per 0.1 s frame); a regular 720 x 32 grid is close enough here.
+       The sensor is mounted upside down on K.A.R.R., so in the world the FOV covers -52..+7 deg. -->
+  <xacro:macro name="livox_mid360" params="frame imu_frame">
+    <gazebo reference="${frame}">
+      <sensor name="livox_mid360" type="gpu_lidar">
+        <topic>/livox/lidar</topic>
+        <gz_frame_id>${frame}</gz_frame_id>
+        <update_rate>10</update_rate>
+        <always_on>true</always_on>
+        <visualize>false</visualize>
+        <lidar>
+          <scan>
+            <horizontal><samples>720</samples><min_angle>-3.14159</min_angle><max_angle>3.14159</max_angle></horizontal>
+            <vertical><samples>32</samples><min_angle>-0.12217</min_angle><max_angle>0.90757</max_angle></vertical>
+          </scan>
+          <range><min>0.1</min><max>40.0</max><resolution>0.001</resolution></range>
+          <noise><type>gaussian</type><mean>0</mean><stddev>0.02</stddev></noise>
+        </lidar>
+      </sensor>
+    </gazebo>
+    <!-- Built-in IMU, simulated at its true position (imu_frame). Like livox_ros_driver2, it is stamped with the
+         lidar frame. Noise values are rough, not measured. -->
+    <gazebo reference="${imu_frame}">
+      <sensor name="livox_imu" type="imu">
+        <topic>/livox/imu</topic>
+        <gz_frame_id>${frame}</gz_frame_id>
+        <update_rate>200</update_rate>
+        <always_on>true</always_on>
+        <imu>
+          <angular_velocity>
+            <x><noise type="gaussian"><stddev>0.002</stddev></noise></x>
+            <y><noise type="gaussian"><stddev>0.002</stddev></noise></y>
+            <z><noise type="gaussian"><stddev>0.002</stddev></noise></z>
+          </angular_velocity>
+          <linear_acceleration>
+            <x><noise type="gaussian"><stddev>0.02</stddev></noise></x>
+            <y><noise type="gaussian"><stddev>0.02</stddev></noise></y>
+            <z><noise type="gaussian"><stddev>0.02</stddev></noise></z>
+          </linear_acceleration>
+        </imu>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+
+  <!-- ZED X One S, wide lens: 110 deg horizontal FOV. Rendered at 960 x 600, 10 Hz: plenty for segmenting and
+       classifying large obstacles, and cheap enough for laptops (the real camera is higher resolution and faster). Mono camera, no depth. The zed wrapper names its optical frame
+       <name>_camera_frame_optical; the sim adds that frame here (on the robot the wrapper publishes it). -->
+  <xacro:macro name="zed_x_one_s" params="name width:=960 height:=600 rate:=10">
+    <link name="${name}_camera_frame_optical"/>
+    <joint name="${name}_camera_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="-1.5708 0 -1.5708"/>
+      <parent link="${name}_camera_link"/>
+      <child link="${name}_camera_frame_optical"/>
+    </joint>
+    <gazebo reference="${name}_camera_link">
+      <sensor name="${name}" type="camera">
+        <topic>/${name}/rgb/image_rect_color</topic>
+        <gz_frame_id>${name}_camera_frame_optical</gz_frame_id>
+        <update_rate>${rate}</update_rate>
+        <always_on>true</always_on>
+        <camera>
+          <camera_info_topic>/${name}/rgb/camera_info</camera_info_topic>
+          <horizontal_fov>1.9199</horizontal_fov>
+          <image><width>${width}</width><height>${height}</height><format>R8G8B8</format></image>
+          <clip><near>0.05</near><far>100</far></clip>
+          <noise><type>gaussian</type><mean>0</mean><stddev>0.005</stddev></noise>
+        </camera>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+
+  <!-- u-blox ZED-F9P (ArduSimple simpleRTK2B): 10 Hz. Noise ~20 cm horizontal / 40 cm vertical: what the robot actually
+       got with spotty RTK corrections (a clean RTK fix is ~1-2 cm).
+       Careful: Gazebo applies horizontal position noise in DEGREES (1.8e-6 deg = 20 cm), vertical in metres.
+       World origin (latitude/longitude) is set in the world file. -->
+  <xacro:macro name="gnss" params="name frame">
+    <gazebo reference="${frame}">
+      <sensor name="gps_${name}" type="navsat">
+        <topic>/gps/${name}/fix</topic>
+        <gz_frame_id>${frame}</gz_frame_id>
+        <update_rate>10</update_rate>
+        <always_on>true</always_on>
+        <navsat>
+          <position_sensing>
+            <horizontal><noise type="gaussian"><stddev>1.8e-6</stddev></noise></horizontal>
+            <vertical><noise type="gaussian"><stddev>0.4</stddev></noise></vertical>
+          </position_sensing>
+          <velocity_sensing>
+            <horizontal><noise type="gaussian"><stddev>0.02</stddev></noise></horizontal>
+            <vertical><noise type="gaussian"><stddev>0.03</stddev></noise></vertical>
+          </velocity_sensing>
+        </navsat>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+</robot>

@@ -41,6 +41,6 @@ Decisions made while converting the SolidWorks export (Nov 2026), and what is st
 - [ ] **Steering speed**: 1.5 rad/s is the exporter default; set it from the steering motor/gearbox.
 - [ ] **Livox orientation**: check with a real scan that +X (away from the connector) faces forward. The Mid-360S is assumed
       to have the same origin height as the Mid-360 (same 65 × 65 × 60 mm body).
-- [ ] **Next stage**: Gazebo (`<gazebo>` tags, wheel friction, sensor plugins) and ros2_control (swerve controller).
-      Will need converting the URDF to xacro or adding a xacro wrapper that includes `karr.urdf`.
+- [x] **Gazebo + ros2_control**: done in `karr_gazebo` / `karr_control` with a xacro wrapper that includes `karr.urdf`
+      unchanged (Nov 2026). Wheel friction and sensor noise are first guesses.
 - [ ] Mesh detail: the Livox is still the largest mesh (76k triangles). It's fine for rviz; it could be simplified further for Gazebo visuals.
