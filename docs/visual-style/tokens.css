@@ -1,0 +1,32 @@
+/* K.A.R.R. Field Manual tokens. See notes.md.
+   Fonts: <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"> */
+:root {
+  --paper: #f7f8fa; --sheet: #ffffff; --slate-tint: #eceff3; --line: #d5dae1;
+  --ink: #1b2430; --slate: #5a6675;
+  --orange: #e8590c; --orange-ink: #b4470a; --orange-tint: #fde9dd;
+  --ok: #2b8a3e; --ok-ink: #237032; --ok-tint: #e2f1e5;
+  --stop: #c92a2a; --stop-fill: #c92a2a; --on-stop-fill: #ffffff; --stop-tint: #f9e1e1;
+  --warn: #b7791f; --focus: #e8590c;
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-6: 24px; --space-8: 32px; --space-12: 48px;
+  --radius-sm: 3px; --radius-md: 6px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #14171c; --sheet: #1b1f25; --slate-tint: #252a32; --line: #313842;
+    --ink: #e6e9ee; --slate: #9ba5b2;
+    --orange: #f07a3a; --orange-ink: #f39257; --orange-tint: #3a261a;
+    --ok: #4cb563; --ok-ink: #6cc77f; --ok-tint: #18301e;
+    --stop: #ef6b63; --stop-fill: #b8322b; --stop-tint: #3a1d1d;
+    --warn: #d9a23f; --focus: #f07a3a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #14171c; --sheet: #1b1f25; --slate-tint: #252a32; --line: #313842;
+  --ink: #e6e9ee; --slate: #9ba5b2;
+  --orange: #f07a3a; --orange-ink: #f39257; --orange-tint: #3a261a;
+  --ok: #4cb563; --ok-ink: #6cc77f; --ok-tint: #18301e;
+  --stop: #ef6b63; --stop-fill: #b8322b; --stop-tint: #3a1d1d;
+  --warn: #d9a23f; --focus: #f07a3a; color-scheme: dark;
+}

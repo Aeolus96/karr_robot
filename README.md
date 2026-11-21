@@ -15,8 +15,9 @@
 </div>
 
 <p align="center">
-  <img src="media/karr_action.gif" width="100%"
-       alt="K.A.R.R. bursts out of its warehouse, jumps off the loading dock, slaloms cones, drifts, swing-turns and drives back up the ramp">
+  <img src="media/karr_mission.gif" width="100%"
+       alt="K.A.R.R. on a small island world: a drone drops a box on it, it delivers to the warehouse, hands a heavy box to a forklift at the loading dock and hops off the dock">
+  <br><sub><a href="media/karr_mission.mp4">Watch in HD</a> · rendered from the robot's CAD model (<a href="media/README.md">how</a>)</sub>
 </p>
 
 <table>
